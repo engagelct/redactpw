@@ -1,0 +1,1 @@
+Basic bash script for redacting passwords from a folder of logs.
