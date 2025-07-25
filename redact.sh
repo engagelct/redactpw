@@ -1,22 +1,24 @@
 #!/bin/bash
 
-#Script for redacting passwords from a folder full of logs
+#Exit script if no args passed
+[ $# -lt 2 ] && echo "Usage: $0 <string> <logdir>" && exit 1
 
-#Cleanup
-rm -rf test_logs_clone/
-cp -r test_logs/ test_logs_clone/
+#Disable history expansion so characters aren't misinterpreted in user input
+set +H
 
-#Change to log directory
-cd test_logs_clone
+#Cleanup - for testing
+#rm -rf test_logs_clone/
+#cp -r test_logs/ test_logs_clone/
 
-#Create list of all logs in directory for looping
-LOGSLIST=$(ls * | grep '\.log$')
-echo $LOGSLIST
+#Take in args from user input
+REDACT="$1"
+LOGDIR="$2"
 
-#Define string being redacted
-echo "Enter the string you wish to redact:"
-read REDACT
-echo "You are redacting $REDACT"
+echo $REDACT
+echo $LOGDIR
+
+cd "$LOGDIR" || { echo "Cannot cd into $LOGDIR"; exit 1; }
+pwd
 
 #Redact $REDACT from logs with sed
 for log in *.log; do
@@ -25,8 +27,8 @@ for log in *.log; do
 done
 
 #Ensure that redaction has happened properly
-for log in $LOGSLIST; do
-    if grep -q $REDACT $log; then
+for log in *.log; do
+    if grep -q "$REDACT" "$log"; then
         echo "$REDACT found in $log"
     else
         echo "$log redacted cleanly"
