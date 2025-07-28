@@ -8,10 +8,10 @@ set +H
 CONFIG_FILE="config.conf"
 
 if [ -f "$CONFIG_FILE" ]; then
-  source "$CONFIG_FILE"
+    source "$CONFIG_FILE"
 else
-  echo "Config not found: $CONFIG_FILE" >&2
-  exit 1
+    echo "Config not found: $CONFIG_FILE" >&2
+    exit 1
 fi
 
 
@@ -30,21 +30,21 @@ LOGDIR="$2"
 
 
 #Confirmation message
-echo "We are redacting '$REDACT' for .log files in the directory $LOGDIR"
+echo "We are redacting '$REDACT' for $FILE_EXTENSION files in the directory $LOGDIR"
 
 
 #Change in log directory and throw error if issue
 cd "$LOGDIR" || { echo "Cannot cd into $LOGDIR"; exit 1; }
 
 
-#Ensure that some .log files exist in specified directory
+#Ensure that some $FILE_EXTENSION files exist in specified directory
 shopt -s nullglob
-logs=(*.log)
-[ ${#logs[@]} -eq 0 ] && echo "No .log files found." && exit 1
+logs=(*$FILE_EXTENSION)
+[ ${#logs[@]} -eq 0 ] && echo "No $FILE_EXTENSION files found." && exit 1
 
 
 #Redact $REDACT from logs with sed
-for log in *.log; do
+for log in *$FILE_EXTENSION; do
 
     #If string to redact exists in file
     if grep -q "$REDACT" "$log"; then
@@ -61,7 +61,7 @@ done
 
 
 #Ensure that redaction has happened properly
-for log in *.log; do
+for log in *$FILE_EXTENSION; do
     if grep -q "$REDACT" "$log"; then
         echo "$REDACT found in $log"
     else
