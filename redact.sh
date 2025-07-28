@@ -47,9 +47,9 @@ done
 [ $# -lt 2 ] && echo "Usage: $0 <string> <logdir>" && exit 1
 
 
-#Testing
-rm -rf test_logs_clone/
-cp -r test_logs/ test_logs_clone/
+#Testing - comment these out if not using
+#rm -rf test_logs_clone/
+#cp -r test_logs/ test_logs_clone/
 
 
 #Take in args from user input
