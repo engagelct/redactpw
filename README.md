@@ -2,7 +2,7 @@
 
 Basic bash script for redacting passwords from a folder of logs.
 
-Usage: ./redact.sh [options] <string> <logdir>
+Usage: ./redact.sh [options] [string] [logdir]
 
 Options:
   -h, --help                Show help message
