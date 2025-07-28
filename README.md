@@ -1,11 +1,14 @@
+## Redact.sh - redacts strings from log files
+
 Basic bash script for redacting passwords from a folder of logs.
 
-Syntax for running on command line is:
+Usage: ./redact.sh [options] <string> <logdir>
 
-```
-./redact.sh [options] <string> <logdir>
-```
+Options:
+  -h, --help                Show help message
+  -v, --verbose             Print output to terminal
 
-Extension for redaction and string to redact into can be changed in the config.conf. 
 
 History expansion is being prevented with "set +H". The script works well in any bash. 
+
+Extension for redaction and string to redact into can be changed in the config.conf. 

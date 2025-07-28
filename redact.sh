@@ -25,10 +25,16 @@ while test $# -gt 0; do
       echo
       echo "Options:"
       echo "  -h, --help                Show help message"
+      echo "  -v, --verbose             Print output to terminal"
       exit 0
       ;;
     
-    #Option for no arguments provided, breaks out of while loop
+    #Set verbose for output to terminal
+    -v|--verbose)
+      VERBOSE=true
+      ;;
+
+    #No arguments provided or 
     *)
       break
       ;;
@@ -52,7 +58,7 @@ LOGDIR="$2"
 
 
 #Confirmation message
-echo "We are redacting '$REDACT' for $FILE_EXTENSION files in the directory $LOGDIR"
+[ "$VERBOSE" = true ] && echo "We are redacting '$REDACT' for $FILE_EXTENSION files in the directory $LOGDIR"
 
 
 #Change in log directory and throw error if issue
@@ -73,11 +79,11 @@ for log in *$FILE_EXTENSION; do
 
         #Replace all literal occurrences of the $REDACT string with "REDACTED"
         sed -i "s|$(printf '%s\n' "$REDACT" | sed 's/[\/&]/\\&/g')|"$REDACTED"|g" "$log"
-        echo "File $log has been redacted"
+        [ "$VERBOSE" = true ] && echo "File $log has been redacted"
     
     #If string to redact non-existent
     else
-        echo "File $log does not contain requested string: $REDACT."
+        [ "$VERBOSE" = true ] && echo "File $log does not contain requested string: $REDACT."
     fi 
 done
 
@@ -85,8 +91,8 @@ done
 #Ensure that redaction has happened properly
 for log in *$FILE_EXTENSION; do
     if grep -q "$REDACT" "$log"; then
-        echo "$REDACT found in $log"
+        [ "$VERBOSE" = true ] && echo "$REDACT found in $log"
     else
-        echo "$log processed cleanly"
+        [ "$VERBOSE" = true ] && echo "$log processed cleanly"
     fi 
 done
