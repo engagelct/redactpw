@@ -14,6 +14,28 @@ else
     exit 1
 fi
 
+#Setting up flags
+while test $# -gt 0; do
+  case "$1" in
+
+    -h|--help)
+      echo "Redact.sh - redacts strings from log files"
+      echo
+      echo "Usage: ./redact.sh [options] <string> <logdir>"
+      echo
+      echo "Options:"
+      echo "  -h, --help                Show help message"
+      exit 0
+      ;;
+    
+    #Option for no arguments provided, breaks out of while loop
+    *)
+      break
+      ;;
+
+  esac
+  shift
+done
 
 #Exit script if no args passed
 [ $# -lt 2 ] && echo "Usage: $0 <string> <logdir>" && exit 1
@@ -50,7 +72,7 @@ for log in *$FILE_EXTENSION; do
     if grep -q "$REDACT" "$log"; then
 
         #Replace all literal occurrences of the $REDACT string with "REDACTED"
-        sed -i "s|$(printf '%s\n' "$REDACT" | sed 's/[\/&]/\\&/g')|REDACTED|g" "$log"
+        sed -i "s|$(printf '%s\n' "$REDACT" | sed 's/[\/&]/\\&/g')|"$REDACTED"|g" "$log"
         echo "File $log has been redacted"
     
     #If string to redact non-existent
